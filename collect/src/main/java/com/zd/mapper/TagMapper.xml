@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zd.mapper.TagMapper">
+	<cache type="com.zd.dao.redis.cache.RedisCache"></cache>
+	<select id="selectTagAll" resultMap="TagAll">
+		select * from tag
+	</select>	
+	<select id="selectTagByName" resultMap="TagAll" parameterType="String" >
+		select * from tag 
+		<where>
+			<if test="_parameter!=null and _parameter!='' ">
+				t_name=#{_parameter}
+			</if>
+		</where>
+	</select>
+	<resultMap type="Tag" id="TagAll">
+		<id property="id" column="t_id"  />
+		<result property="name" column="t_name" />
+		<result property="count" column="t_count" />
+	</resultMap>
+	<insert id="addTag" parameterType="String">
+		<if test="_parameter!=null and _parameter!='' ">
+			insert into tag(t_name,t_count) values(#{_parameter},1)
+		</if>
+	</insert>
+	<update id="updateTag" parameterType="String" >
+		<if test="_parameter!=null and _parameter!='' ">
+			update tag set t_count=t_count+1 where t_name=#{_parameter}
+		</if>
+	</update>
+	
+</mapper>

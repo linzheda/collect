@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>添加书签</title>
+<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+<style type="text/css">
+	h1{
+		padding-left:20px;
+	}
+	#addform{
+		margin-left:20px;
+		text-line:10px;
+		font-size:13px;
+		
+	}
+	#name,#url{
+		margin-bottom:10px;
+		width:200px;
+	}
+	
+	#desc{
+		height:40px;
+		width:200px;
+		margin-bottom:10px;
+		vertical-align:top;
+	}
+	.btn{
+		font-size:10px;
+		height:20px;
+		width:55px;
+		margin-left:10px;
+	}
+
+
+
+</style>
+</head>
+<body>
+	<h1>搜藏</h1>
+	<form id="addform">
+		<label>名称: </label><input type="text" name="name" id="name" value=""><br>
+		<label>链接: </label><input type="text" name="url" id="url" value="http://" ><br>
+		<label> tag : </label><input type="text" name="tag" id="tag" style="width:200px;" value=""><br>
+		<span style="color:green;font-size:10px;margin-left:40px;">可以多个，中间用','隔开</span><br>
+		<label class="desc">描述: </label><textarea name="desc" id="desc" ></textarea><br>
+		<input type="reset" value="取消" class="btn" style="margin-left:120px;"> 
+		<input type="button" value="提交" class="btn" onclick="addFav()">
+	</form>
+</body>
+<script type="text/javascript">
+	function addFav(){
+		var label=$("#name").val();
+		if(label==""||label==null){
+			alert("名称不能为空....");
+			return;
+		}
+		var url=$("#url").val();
+		var tags=$("#tag").val();
+		var desc=$("#desc").val();
+		$.ajax({
+			url:"fav.action",
+			data:"op=addFav&label="+label+"&url="+url+"&tags="+tags+"&desc="+desc,
+			type:"POST",
+			dataType:"json",
+			success:function(data){
+				if(data.code==1){
+					alert("添加成功");
+					window.close(); 
+					window.opener.location.href = "index.html";
+				}else{
+					alert("出错了....");
+				}
+			}	
+		});
+		
+		
+	}
+
+</script>
+</html>

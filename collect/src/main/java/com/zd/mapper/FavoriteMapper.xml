@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zd.mapper.FavoriteMapper">
+	<cache type="com.zd.dao.redis.cache.RedisCache"></cache>
+	<select id="selectFavoriteAll" resultMap="FavoriteAll">
+		select f_id,f_label,f_url,f_tags,f_desc from favorite
+	</select>	
+	<select id="selectFavoriteOne" resultMap="FavoriteAll" parameterType="String">
+		select f_id,f_label,f_url,f_tags,f_desc from favorite 
+		<where>
+			<if test="_parameter!=null and _parameter!='' ">
+				f_tags like #{_parameter}
+			</if>
+		</where>
+	</select>
+	<insert id="addFav" parameterType="Fav"  >
+		insert into favorite(f_label,f_url,f_tags,f_desc) values(#{label},#{url},#{tags},#{desc})
+	</insert>
+	
+	<resultMap type="Fav" id="FavoriteAll">
+		<id property="id" column="f_id"  />
+		<result property="label" column="f_label" />
+		<result property="url" column="f_url" />
+		<result property="tags" column="f_tags" />
+		<result property="desc" column="f_desc" />
+	</resultMap>
+	
+</mapper>
